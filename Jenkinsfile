@@ -6,7 +6,6 @@ pipeline {
         CONTAINER_NAME = 'flask-hello-world'
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
 
-        // Updated kubectl path based on your system
         KUBECTL_PATH = 'C:\\Program Files\\Docker\\Docker\\resources\\bin\\kubectl.exe'
         KUBECONFIG = 'C:\\Users\\Vrinda\\.kube\\config'
     }
@@ -47,6 +46,7 @@ pipeline {
                     set KUBECONFIG=%KUBECONFIG%
                     "%KUBECTL_PATH%" apply -f deployment.yaml
                     "%KUBECTL_PATH%" apply -f service.yaml
+                    "%KUBECTL_PATH%" rollout restart deployment flask-hello-deployment
                 """
             }
         }
