@@ -1,3 +1,4 @@
+Jenkins:
 pipeline {
     agent any
 
@@ -8,14 +9,6 @@ pipeline {
     }
 
     stages {
-        stage('Check Minikube') {
-            steps {
-                echo '🔍 Checking Minikube availability...'
-                bat 'where minikube'
-                bat 'minikube version'
-            }
-        }
-
         stage('Build') {
             steps {
                 echo '🔧 Building Docker image...'
