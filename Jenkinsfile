@@ -5,7 +5,7 @@ pipeline {
         DOCKER_HUB_REPO = 'vrindabs/flask-hello-world'
         CONTAINER_NAME = 'flask-hello-world'
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
-        MINIKUBE_PATH = 'C:\\path\\to\\minikube.exe'  // <- Change this!
+        MINIKUBE_PATH = 'C:\\Users\\Vrinda\\minikube\\minikube.exe'
     }
 
     stages {
