@@ -1,4 +1,3 @@
-Jenkins:
 pipeline {
     agent any
 
@@ -6,6 +5,7 @@ pipeline {
         DOCKER_HUB_REPO = 'vrindabs/flask-hello-world'
         CONTAINER_NAME = 'flask-hello-world'
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
+        MINIKUBE_PATH = 'C:\\path\\to\\minikube.exe'  // <- Change this!
     }
 
     stages {
@@ -40,10 +40,10 @@ pipeline {
         stage('Deploy to Kubernetes (Minikube)') {
             steps {
                 echo '🚀 Deploying to Kubernetes...'
-                bat '''
-                    minikube kubectl -- apply -f deployment.yaml
-                    minikube kubectl -- apply -f service.yaml
-                '''
+                bat """
+                    \"%MINIKUBE_PATH%\" kubectl -- apply -f deployment.yaml
+                    \"%MINIKUBE_PATH%\" kubectl -- apply -f service.yaml
+                """
             }
         }
     }
