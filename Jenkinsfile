@@ -5,7 +5,10 @@ pipeline {
         DOCKER_HUB_REPO = 'vrindabs/flask-hello-world'
         CONTAINER_NAME = 'flask-hello-world'
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
-        MINIKUBE_PATH = 'C:\\Users\\Vrinda\\minikube\\minikube.exe'
+
+        // NEW: Use real kubectl path and kubeconfig
+        KUBECTL_PATH = 'C:\\Users\\Vrinda\\kubectl\\kubectl.exe' // OR just 'kubectl' if in PATH
+        KUBECONFIG = 'C:\\Users\\Vrinda\\.kube\\config'
     }
 
     stages {
@@ -37,12 +40,13 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes (Minikube)') {
+        stage('Deploy to Kubernetes') {
             steps {
                 echo '🚀 Deploying to Kubernetes...'
                 bat """
-                    \"%MINIKUBE_PATH%\" kubectl -- apply -f deployment.yaml
-                    \"%MINIKUBE_PATH%\" kubectl -- apply -f service.yaml
+                    set KUBECONFIG=%KUBECONFIG%
+                    %KUBECTL_PATH% apply -f deployment.yaml
+                    %KUBECTL_PATH% apply -f service.yaml
                 """
             }
         }
