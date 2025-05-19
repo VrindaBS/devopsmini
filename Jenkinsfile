@@ -13,40 +13,42 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo '🔧 Building Docker image...'
-                bat "docker build -t %DOCKER_HUB_REPO%:latest ."
+                script {
+                    imageTag = "${DOCKER_HUB_REPO}:${env.BUILD_NUMBER}"
+                    echo "🔧 Building Docker image with tag: ${imageTag}"
+                    bat "docker build -t ${imageTag} ."
+                }
             }
         }
 
         stage('Test') {
             steps {
                 echo '🧪 Running tests...'
-                bat '''
+                bat """
                     docker stop %CONTAINER_NAME% || exit 0
                     docker rm %CONTAINER_NAME% || exit 0
-                    docker run --rm --name %CONTAINER_NAME% %DOCKER_HUB_REPO%:latest cmd /c "pytest test.py && flake8"
-                '''
+                    docker run --rm --name %CONTAINER_NAME% ${imageTag} cmd /c "pytest test.py && flake8"
+                """
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
                 echo '📤 Pushing image to Docker Hub...'
-                bat '''
+                bat """
                     echo %DOCKERHUB_CREDENTIALS_PSW% | docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin
-                    docker push %DOCKER_HUB_REPO%:latest
-                '''
+                    docker push ${imageTag}
+                """
             }
         }
 
         stage('Deploy to Kubernetes') {
             steps {
-                echo '🚀 Deploying to Kubernetes...'
+                echo '🚀 Deploying to Kubernetes with updated image...'
                 bat """
                     set KUBECONFIG=%KUBECONFIG%
-                    "%KUBECTL_PATH%" apply -f deployment.yaml
-                    "%KUBECTL_PATH%" apply -f service.yaml
-                    "%KUBECTL_PATH%" rollout restart deployment flask-hello-deployment
+                    "${KUBECTL_PATH}" set image deployment/flask-hello-deployment flask-hello=${imageTag}
+                    "${KUBECTL_PATH}" rollout status deployment flask-hello-deployment
                 """
             }
         }
