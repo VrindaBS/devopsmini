@@ -6,8 +6,8 @@ pipeline {
         CONTAINER_NAME = 'flask-hello-world'
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
 
-        // NEW: Use real kubectl path and kubeconfig
-        KUBECTL_PATH = 'C:\\Users\\Vrinda\\kubectl\\kubectl.exe' // OR just 'kubectl' if in PATH
+        // Updated kubectl path based on your system
+        KUBECTL_PATH = 'C:\\Program Files\\Docker\\Docker\\resources\\bin\\kubectl.exe'
         KUBECONFIG = 'C:\\Users\\Vrinda\\.kube\\config'
     }
 
@@ -45,8 +45,8 @@ pipeline {
                 echo '🚀 Deploying to Kubernetes...'
                 bat """
                     set KUBECONFIG=%KUBECONFIG%
-                    %KUBECTL_PATH% apply -f deployment.yaml
-                    %KUBECTL_PATH% apply -f service.yaml
+                    "%KUBECTL_PATH%" apply -f deployment.yaml
+                    "%KUBECTL_PATH%" apply -f service.yaml
                 """
             }
         }
