@@ -28,7 +28,10 @@ def home():
                 color: #2c3e50;
                 font-size: 40px;
             }
-
+            h2{
+               color: #2c3e50;
+               font-size: 20px;
+            }
             p {
                 color: #34495e;
                 font-size: 20px;
@@ -46,6 +49,7 @@ def home():
     <body>
         <div class="box">
             <h1>CI/CD Pipeline for Flask Application</h1>
+            <h2>This is my devops first project</h2>
             <p>Powered by Docker, Jenkins & Kubernetes</p>
         </div>
     </body>
