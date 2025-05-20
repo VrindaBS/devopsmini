@@ -49,7 +49,6 @@ def home():
     <body>
         <div class="box">
             <h1>CI/CD Pipeline for Flask Application</h1>
-            <h2>This is my devops first project</h2>
             <p>Powered by Docker, Jenkins & Kubernetes</p>
         </div>
     </body>
